@@ -1,215 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-hig-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CCK Annual Dinner — Host Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0f0d">
 <meta name="robots" content="noindex, nofollow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>CCK Annual Dinner — Host Dashboard</title>
+<link rel="stylesheet" href="hig/tokens.css">
+<link rel="stylesheet" href="hig/apple-hig.css">
 <style>
-  :root {
-    --ink: #0e1218;
-    --card: rgba(22, 28, 38, 0.72);
-    --hairline: rgba(224, 169, 109, 0.2);
-    --hairline-strong: rgba(224, 169, 109, 0.42);
-    --copper: #c98b4e;
-    --copper-bright: #e0a96d;
-    --champagne: #ecd9bd;
-    --text: #e9e4dc;
-    --text-dim: #9aa3ae;
-    --good: #8fcdb0;
-    --bad: #cf9090;
-    --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
+  html, body { margin: 0; padding: 0; }
+  body { min-height: 100vh; min-height: 100dvh; background: #0b0f0d; }
+
+  .backdrop { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .backdrop::before {
+    content: ""; position: absolute; inset: -20%;
     background:
-      radial-gradient(1000px 500px at 50% -12%, rgba(201, 139, 78, 0.13), transparent 60%),
-      linear-gradient(180deg, #0e1218, #0c0f14);
-    min-height: 100vh; color: var(--text);
-    font-family: "Jost", sans-serif; font-weight: 300;
+      radial-gradient(46% 38% at 18% 8%, rgba(48, 209, 88, 0.13), transparent 70%),
+      radial-gradient(42% 36% at 86% 30%, rgba(255, 69, 58, 0.08), transparent 70%),
+      radial-gradient(120% 100% at 50% 0%, #111813 0%, #0b0f0d 60%, #060807 100%);
   }
-  .wrap { max-width: 980px; margin: 0 auto; padding: 48px 24px 80px; }
 
-  header { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  .kicker { font-size: 11px; font-weight: 500; letter-spacing: 0.4em; text-transform: uppercase; color: var(--copper-bright); }
-  h1 { font-family: "Cormorant Garamond", serif; font-weight: 500; font-size: clamp(34px, 5vw, 46px); margin-top: 8px; }
-  h1 em { font-style: italic; color: var(--champagne); }
-  .meta { font-size: 13px; color: var(--text-dim); margin-top: 6px; letter-spacing: 0.08em; }
+  .nav-wrap .glass { width: 100%; display: flex; align-items: center; flex-wrap: wrap; gap: var(--hig-space-3); min-height: 52px; padding: var(--hig-space-2) var(--hig-space-5); border-radius: var(--hig-radius-xl); }
+  .nav-wrap { position: sticky; top: 0; z-index: 50; padding: var(--hig-space-3) var(--hig-margin) 0; max-width: 980px; margin: 0 auto; }
+  .nav-title { flex: 1; font-size: var(--hig-headline); font-weight: var(--hig-w-semibold); }
+  .nav-actions { display: flex; gap: var(--hig-space-2); }
+  .nav-actions .hig-btn { min-height: 36px; }
 
-  .live { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--text-dim); }
-  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--good); animation: pulse 1.8s infinite; }
-  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(143,205,176,0.5);} 60% { box-shadow: 0 0 0 7px rgba(143,205,176,0);} }
+  main { position: relative; z-index: 1; max-width: 980px; margin: 0 auto;
+         padding: var(--hig-space-5) var(--hig-margin) var(--hig-space-11); }
 
-  .stats {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 14px; margin-top: 38px;
-  }
-  .stat {
-    background: var(--card); border: 1px solid var(--hairline); border-radius: 4px;
-    padding: 22px 20px 18px; position: relative; overflow: hidden;
-  }
-  .stat::before {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--copper), transparent); opacity: 0.6;
-  }
-  .stat .num {
-    font-family: "Cormorant Garamond", serif; font-weight: 600;
-    font-size: 44px; line-height: 1; color: var(--champagne);
-  }
-  .stat.hero .num { color: var(--copper-bright); }
-  .stat .lbl { margin-top: 8px; font-size: 10.5px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-dim); }
+  .title-block h1 { margin: 0; font-size: var(--hig-large-title); line-height: var(--hig-large-title-lh);
+                    letter-spacing: var(--hig-large-title-tr); font-weight: var(--hig-w-bold); }
+  .title-block p { margin: var(--hig-space-2) 0 0; color: var(--hig-label-2); }
+  .live { display: inline-flex; align-items: center; gap: var(--hig-space-2); color: var(--hig-label-2); }
+  .live .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hig-success); }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--hig-success) 45%, transparent); }
+                     60% { box-shadow: 0 0 0 6px transparent; } }
+  .live .dot { animation: pulse 1.8s infinite; }
 
-  .bar-card { margin-top: 14px; background: var(--card); border: 1px solid var(--hairline); border-radius: 4px; padding: 18px 20px; }
-  .bar { height: 8px; border-radius: 99px; background: rgba(255,255,255,0.07); overflow: hidden; display: flex; }
-  .bar i { display: block; height: 100%; transition: width 0.8s var(--ease); }
-  .bar .yes { background: linear-gradient(90deg, #8c5a2b, var(--copper-bright)); }
-  .bar .no { background: rgba(207, 144, 144, 0.55); }
-  .bar-legend { display: flex; justify-content: space-between; margin-top: 10px; font-size: 12px; color: var(--text-dim); letter-spacing: 0.06em; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+           gap: var(--hig-space-4); margin-top: var(--hig-space-7); }
+  .stat { padding: var(--hig-space-5); }
+  .stat .num { font-size: var(--hig-title-1); line-height: var(--hig-title-1-lh); font-weight: var(--hig-w-bold);
+               font-variant-numeric: tabular-nums; }
+  .stat.hero .num { color: var(--hig-tint); }
+  .stat .lbl { margin-top: var(--hig-space-1); color: var(--hig-label-2); font-size: var(--hig-footnote); }
 
-  .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 40px 0 14px; flex-wrap: wrap; }
-  .toolbar h2 { font-family: "Cormorant Garamond", serif; font-style: italic; font-weight: 500; font-size: 24px; color: var(--champagne); }
-  .actions { display: flex; gap: 10px; }
-  .btn {
-    cursor: pointer; font-family: "Jost", sans-serif; font-weight: 500; font-size: 11px;
-    letter-spacing: 0.24em; text-indent: 0.24em; text-transform: uppercase;
-    color: var(--copper-bright); background: none;
-    border: 1px solid var(--hairline-strong); border-radius: 3px; padding: 10px 16px;
-    transition: background 0.25s var(--ease);
-  }
-  .btn:hover { background: rgba(201, 139, 78, 0.12); }
+  .share { margin-top: var(--hig-space-4); padding: var(--hig-space-5); }
+  .share .hig-progress { margin-top: var(--hig-space-3); height: 6px; border-radius: 3px; }
+  .share .hig-progress > i { background: var(--hig-success); border-radius: 3px; }
+  .share-legend { display: flex; justify-content: space-between; margin-top: var(--hig-space-3);
+                  color: var(--hig-label-2); font-size: var(--hig-footnote); }
 
-  .tbl-card { background: var(--card); border: 1px solid var(--hairline); border-radius: 4px; overflow: hidden; }
-  table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
-  th {
-    text-align: left; font-weight: 500; font-size: 10.5px; letter-spacing: 0.24em; text-transform: uppercase;
-    color: var(--text-dim); padding: 14px 18px; border-bottom: 1px solid var(--hairline);
-    background: rgba(10, 13, 18, 0.35);
-  }
-  td { padding: 13px 18px; border-bottom: 1px solid rgba(255,255,255,0.05); font-weight: 400; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: rgba(201, 139, 78, 0.04); }
-  .pill {
-    display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
-    border-radius: 99px; padding: 4px 12px;
-  }
-  .pill.yes { color: var(--good); border: 1px solid rgba(143, 205, 176, 0.35); background: rgba(143, 205, 176, 0.07); }
-  .pill.no { color: var(--bad); border: 1px solid rgba(207, 144, 144, 0.35); background: rgba(207, 144, 144, 0.07); }
-  .plus { color: var(--copper-bright); font-weight: 500; }
-  td.time { color: var(--text-dim); font-size: 13px; white-space: nowrap; }
-  .empty { padding: 56px 20px; text-align: center; color: var(--text-dim); font-size: 15px; }
-  .empty em { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 22px; color: var(--champagne); display: block; margin-bottom: 8px; }
-  .note { margin-top: 14px; font-size: 12px; color: #525c68; letter-spacing: 0.04em; }
-  @media (max-width: 640px) {
-    th:nth-child(4), td:nth-child(4) { display: none; }
-  }
+  .toolbar-row { display: flex; align-items: center; justify-content: space-between; gap: var(--hig-space-4);
+                 flex-wrap: wrap; margin: var(--hig-space-8) 0 var(--hig-space-4); }
+  .toolbar-row h2 { margin: 0; font-size: var(--hig-title-2); font-weight: var(--hig-w-semibold); }
+  .hig-segmented { width: 100%; max-width: 360px; }
+  .hig-segmented > button { min-height: 32px; }
+
+  .guest-list { padding: 0; }
+  .guest-list .hig-row { background: transparent; }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; flex: none;
+            background: var(--fill-2); color: var(--hig-label);
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: var(--hig-footnote); font-weight: var(--hig-w-semibold); }
+  .tag-yes { background: color-mix(in srgb, var(--hig-success) 18%, transparent); color: var(--hig-success); }
+  .tag-no  { background: var(--fill-3); color: var(--hig-label-2); }
+  .tag-plus { background: color-mix(in srgb, var(--hig-tint) 18%, transparent); color: var(--hig-tint); }
+  .row-tags { display: flex; gap: var(--hig-space-2); flex: none; flex-wrap: wrap; justify-content: flex-end; }
+
+  .state { padding: var(--hig-space-10) var(--hig-space-5); text-align: center; color: var(--hig-label-2); }
+  .state h3 { margin: 0 0 var(--hig-space-2); color: var(--hig-label); font-size: var(--hig-headline); }
+  .skeleton-row { display: flex; align-items: center; gap: var(--hig-space-4); padding: var(--hig-space-4) var(--hig-margin); }
+  .skeleton-row .hig-skeleton:first-child { width: 36px; height: 36px; border-radius: 50%; flex: none; }
+  .skeleton-row .hig-skeleton:last-child { height: 14px; flex: 1; max-width: 220px; }
+
+  .updated { margin-top: var(--hig-space-4); color: var(--hig-label-3); font-size: var(--hig-caption-1); text-align: center; }
 </style>
 </head>
-<body>
-<div class="wrap">
-  <header>
-    <div>
-      <div class="kicker">Host dashboard · Canadian College of Kuwait</div>
-      <h1>CCK <em>Annual Dinner</em></h1>
-      <div class="meta">Monday 22 June 2026 · 7:00 – 10:00 PM</div>
+<body class="hig">
+
+<div class="backdrop" aria-hidden="true"></div>
+
+<div class="nav-wrap">
+  <nav class="glass" aria-label="Dashboard actions">
+    <span class="nav-title">Host Dashboard</span>
+    <span class="live" id="liveWrap"><span class="dot" aria-hidden="true"></span><span class="hig-footnote" id="liveLbl">Live</span></span>
+    <div class="nav-actions">
+      <button class="hig-btn hig-btn--tinted hig-btn--sm" id="refreshBtn">Refresh</button>
+      <button class="hig-btn hig-btn--tinted hig-btn--sm" id="csvBtn">Export CSV</button>
     </div>
-    <div class="live"><span class="dot"></span><span id="liveLbl">Live</span></div>
+  </nav>
+</div>
+
+<main>
+  <header class="title-block">
+    <h1>CCK Annual Dinner</h1>
+    <p class="hig-subheadline">Canadian College of Kuwait · Monday 22 June 2026 · 7:00 – 10:00 PM</p>
   </header>
 
-  <div class="stats">
-    <div class="stat hero"><div class="num" id="sHead">—</div><div class="lbl">Total headcount</div></div>
-    <div class="stat"><div class="num" id="sYes">—</div><div class="lbl">Attending</div></div>
-    <div class="stat"><div class="num" id="sPlus">—</div><div class="lbl">Plus ones</div></div>
-    <div class="stat"><div class="num" id="sNo">—</div><div class="lbl">Regrets</div></div>
-    <div class="stat"><div class="num" id="sTotal">—</div><div class="lbl">Responses</div></div>
-  </div>
+  <section class="stats" aria-label="RSVP totals" aria-live="polite">
+    <div class="stat glass hero"><div class="num" id="sHead">–</div><div class="lbl">Total headcount</div></div>
+    <div class="stat glass"><div class="num" id="sYes">–</div><div class="lbl">Attending</div></div>
+    <div class="stat glass"><div class="num" id="sPlus">–</div><div class="lbl">Plus ones</div></div>
+    <div class="stat glass"><div class="num" id="sNo">–</div><div class="lbl">Regrets</div></div>
+    <div class="stat glass"><div class="num" id="sTotal">–</div><div class="lbl">Responses</div></div>
+  </section>
 
-  <div class="bar-card">
-    <div class="bar"><i class="yes" id="barYes" style="width:0%"></i><i class="no" id="barNo" style="width:0%"></i></div>
-    <div class="bar-legend"><span id="legendYes">Attending — 0%</span><span id="legendNo">Regrets — 0%</span></div>
-  </div>
+  <section class="share glass" aria-label="Attendance share">
+    <span class="hig-footnote hig-secondary">Attendance</span>
+    <div class="hig-progress" role="progressbar" id="shareBar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Share of responses attending">
+      <i id="barYes" style="width:0%"></i>
+    </div>
+    <div class="share-legend"><span id="legendYes">Attending — 0%</span><span id="legendNo">Regrets — 0%</span></div>
+  </section>
 
-  <div class="toolbar">
+  <div class="toolbar-row">
     <h2>Guest list</h2>
-    <div class="actions">
-      <button class="btn" id="refreshBtn">Refresh</button>
-      <button class="btn" id="csvBtn">Export CSV</button>
+    <div class="hig-segmented" role="tablist" aria-label="Filter guest list">
+      <button role="tab" aria-selected="true" data-filter="all">All</button>
+      <button role="tab" aria-selected="false" data-filter="yes">Attending</button>
+      <button role="tab" aria-selected="false" data-filter="no">Regrets</button>
     </div>
   </div>
 
-  <div class="tbl-card">
-    <table id="tbl">
-      <thead><tr><th>Guest</th><th>RSVP</th><th>Plus one</th><th>Responded</th></tr></thead>
-      <tbody id="tbody"></tbody>
-    </table>
-    <div class="empty" id="empty" style="display:none">
-      <em>No responses yet</em>
-      Share the RSVP link — replies appear here the moment they arrive.
+  <section class="guest-list glass" aria-label="Guest responses">
+    <div id="loading">
+      <div class="skeleton-row"><span class="hig-skeleton"></span><span class="hig-skeleton"></span></div>
+      <div class="skeleton-row"><span class="hig-skeleton"></span><span class="hig-skeleton"></span></div>
+      <div class="skeleton-row"><span class="hig-skeleton"></span><span class="hig-skeleton"></span></div>
     </div>
-  </div>
+    <ul class="hig-list" id="tbody" style="background:transparent; display:none"></ul>
+    <div class="state" id="empty" style="display:none">
+      <h3>No responses yet</h3>
+      <p class="hig-subheadline" style="margin:0">Share the RSVP link — replies appear here the moment they arrive.</p>
+    </div>
+    <div class="state" id="error" style="display:none" role="alert">
+      <h3>Couldn't load responses</h3>
+      <p class="hig-subheadline" style="margin:0 0 16px">Check your connection, then try again.</p>
+      <button class="hig-btn hig-btn--tinted" id="retryBtn">Try Again</button>
+    </div>
+  </section>
 
-  <p class="note">Auto-refreshes every 30 seconds. Each guest's latest response replaces their earlier one.</p>
-</div>
+  <p class="updated" id="updated">Auto-refreshes every 30 seconds · A guest's latest response replaces their earlier one</p>
+</main>
 
 <script>
   const STORE = "https://kvdb.io/DhdtZG5kWh7god2RSUoW6U";
-  let rows = [];
+  let rows = [], filter = "all", loaded = false;
 
   async function load() {
     document.getElementById("liveLbl").textContent = "Updating…";
     try {
       const res = await fetch(`${STORE}/?prefix=rsvp_&values=true&format=json&limit=1000`, { cache: "no-store" });
+      if (!res.ok) throw new Error(res.status);
       const data = await res.json(); // [[key, value], ...]
       rows = data.map(([k, v]) => { try { return JSON.parse(v); } catch { return null; } })
                  .filter(r => r && r.name)
                  .sort((a, b) => (b.ts || "").localeCompare(a.ts || ""));
+      loaded = true;
+      document.getElementById("error").style.display = "none";
       render();
+      document.getElementById("liveLbl").textContent = "Live";
+      const now = new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kuwait" });
+      document.getElementById("updated").textContent =
+        `Updated ${now} Kuwait time · auto-refreshes every 30 seconds · a guest's latest response replaces their earlier one`;
     } catch (e) {
-      document.getElementById("liveLbl").textContent = "Offline — retrying";
-      return;
+      document.getElementById("liveLbl").textContent = "Offline";
+      document.getElementById("loading").style.display = "none";
+      if (!loaded) {
+        document.getElementById("error").style.display = "block";
+        document.getElementById("tbody").style.display = "none";
+        document.getElementById("empty").style.display = "none";
+      }
     }
-    document.getElementById("liveLbl").textContent = "Live";
   }
 
   function render() {
     const yes = rows.filter(r => r.attending === "yes");
     const no = rows.filter(r => r.attending !== "yes");
     const plus = yes.filter(r => r.plusone === "yes").length;
-    const head = yes.length + plus;
 
-    set("sHead", head); set("sYes", yes.length); set("sPlus", plus);
+    set("sHead", yes.length + plus); set("sYes", yes.length); set("sPlus", plus);
     set("sNo", no.length); set("sTotal", rows.length);
 
-    const total = rows.length || 1;
-    const py = Math.round(100 * yes.length / total), pn = rows.length ? 100 - py : 0;
+    const py = rows.length ? Math.round(100 * yes.length / rows.length) : 0;
+    const bar = document.getElementById("shareBar");
+    bar.setAttribute("aria-valuenow", py);
     document.getElementById("barYes").style.width = py + "%";
-    document.getElementById("barNo").style.width = pn + "%";
-    document.getElementById("legendYes").textContent = `Attending — ${rows.length ? py : 0}%`;
-    document.getElementById("legendNo").textContent = `Regrets — ${pn}%`;
+    document.getElementById("legendYes").textContent = `Attending — ${py}%`;
+    document.getElementById("legendNo").textContent = `Regrets — ${rows.length ? 100 - py : 0}%`;
 
+    const list = filter === "all" ? rows : rows.filter(r => (r.attending === "yes") === (filter === "yes"));
     const tbody = document.getElementById("tbody");
-    tbody.innerHTML = rows.map(r => `
-      <tr>
-        <td>${esc(r.name)}</td>
-        <td><span class="pill ${r.attending === "yes" ? "yes" : "no"}">${r.attending === "yes" ? "Attending" : "Regrets"}</span></td>
-        <td>${r.attending === "yes" && r.plusone === "yes" ? '<span class="plus">+1</span>' : '<span style="color:#525c68">—</span>'}</td>
-        <td class="time">${fmt(r.ts)}</td>
-      </tr>`).join("");
-    document.getElementById("empty").style.display = rows.length ? "none" : "block";
-    document.getElementById("tbl").style.display = rows.length ? "table" : "none";
+    tbody.innerHTML = list.map(r => `
+      <li class="hig-row">
+        <span class="avatar" aria-hidden="true">${initials(r.name)}</span>
+        <span class="hig-row-text">
+          <span class="hig-row-title">${esc(r.name)}</span>
+          <span class="hig-row-subtitle">Responded ${fmt(r.ts)}</span>
+        </span>
+        <span class="row-tags">
+          <span class="hig-tag ${r.attending === "yes" ? "tag-yes" : "tag-no"}">${r.attending === "yes" ? "Attending" : "Regrets"}</span>
+          ${r.attending === "yes" && r.plusone === "yes" ? '<span class="hig-tag tag-plus">+1</span>' : ""}
+        </span>
+      </li>`).join("");
+
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("empty").style.display = list.length ? "none" : "block";
+    tbody.style.display = list.length ? "block" : "none";
+    if (!list.length && rows.length) {
+      document.getElementById("empty").querySelector("h3").textContent =
+        filter === "yes" ? "No attendees yet" : "No regrets yet";
+      document.getElementById("empty").querySelector("p").textContent = "Try a different filter.";
+    }
   }
 
   const set = (id, v) => document.getElementById(id).textContent = v;
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const initials = n => n.trim().split(/\s+/).slice(0, 2).map(w => w[0]).join("").toUpperCase();
   const fmt = ts => {
     if (!ts) return "—";
-    const d = new Date(ts);
-    return d.toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kuwait" });
+    return new Date(ts).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kuwait" });
   };
 
+  document.querySelectorAll("[data-filter]").forEach(b => b.addEventListener("click", () => {
+    filter = b.dataset.filter;
+    document.querySelectorAll("[data-filter]").forEach(x => x.setAttribute("aria-selected", String(x === b)));
+    render();
+  }));
+
   document.getElementById("refreshBtn").addEventListener("click", load);
+  document.getElementById("retryBtn").addEventListener("click", load);
   document.getElementById("csvBtn").addEventListener("click", () => {
     const lines = [["Name", "RSVP", "Plus one", "Responded (Kuwait time)"]]
       .concat(rows.map(r => [r.name, r.attending === "yes" ? "Will attend" : "Will not attend",

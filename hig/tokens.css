@@ -1,0 +1,209 @@
+/* ==========================================================================
+   apple-hig-web · tokens.css
+   Design tokens translating Apple's Human Interface Guidelines to the web.
+   Link this FIRST, then apple-hig.css.
+
+   - Semantic tokens auto-switch for dark mode via prefers-color-scheme.
+   - Force a theme with <html data-hig-theme="light|dark">.
+   - Switch density/type to desktop with <html data-hig-platform="macos">.
+
+   Values are factual specs (hex, point sizes) synthesized from Apple's HIG.
+   The San Francisco font is NOT bundled (Apple-licensed); we rely on
+   -apple-system, which resolves to SF on Apple devices.
+   ========================================================================== */
+
+:root {
+  /* ---- Raw system (tint) colors · light ------------------------------- */
+  --sys-blue:   #007AFF;  --sys-green:  #34C759;  --sys-indigo: #5856D6;
+  --sys-orange: #FF9500;  --sys-pink:   #FF2D55;  --sys-purple: #AF52DE;
+  --sys-red:    #FF3B30;  --sys-teal:   #30B0C7;  --sys-cyan:   #32ADE6;
+  --sys-mint:   #00C7BE;  --sys-yellow: #FFCC00;  --sys-brown:  #A2845E;
+
+  /* ---- Gray ramp · light --------------------------------------------- */
+  --gray-1: #8E8E93; --gray-2: #AEAEB2; --gray-3: #C7C7CC;
+  --gray-4: #D1D1D6; --gray-5: #E5E5EA; --gray-6: #F2F2F7;
+
+  /* ---- Label (text) colors · light ----------------------------------- */
+  --label:            rgba(0, 0, 0, 1);
+  --label-secondary:  rgba(60, 60, 67, 0.6);
+  --label-tertiary:   rgba(60, 60, 67, 0.3);
+  --label-quaternary: rgba(60, 60, 67, 0.18);
+  --placeholder:      rgba(60, 60, 67, 0.3);
+
+  /* ---- Separators · light -------------------------------------------- */
+  --separator:        rgba(60, 60, 67, 0.29);
+  --separator-opaque: #C6C6C8;
+
+  /* ---- Backgrounds · light ------------------------------------------- */
+  --bg:                 #FFFFFF;
+  --bg-secondary:       #F2F2F7;
+  --bg-tertiary:        #FFFFFF;
+  --bg-grouped:         #F2F2F7;
+  --bg-grouped-2:       #FFFFFF;
+  --bg-grouped-3:       #F2F2F7;
+  --bg-elevated:        #FFFFFF; /* surface used by glass fallback / popovers */
+
+  /* ---- Fills (translucent) · light ----------------------------------- */
+  --fill-1: rgba(120, 120, 128, 0.20);
+  --fill-2: rgba(120, 120, 128, 0.16);
+  --fill-3: rgba(118, 118, 128, 0.12);
+  --fill-4: rgba(116, 116, 128, 0.08);
+
+  /* ---- Semantic tint -------------------------------------------------- */
+  --hig-tint:           var(--sys-blue);
+  --hig-tint-on:        #FFFFFF;     /* text/icon on a filled tint */
+  --hig-tint-soft:      color-mix(in srgb, var(--hig-tint) 15%, transparent);
+  --hig-destructive:    var(--sys-red);
+  --hig-success:        var(--sys-green);
+  --hig-warning:        var(--sys-orange);
+
+  /* ---- Convenience semantic aliases (use THESE in app CSS) ----------- */
+  --hig-bg:             var(--bg);
+  --hig-bg-secondary:   var(--bg-secondary);
+  --hig-bg-grouped:     var(--bg-grouped);
+  --hig-card:           var(--bg-grouped-2);
+  --hig-bg-elevated:    var(--bg-elevated);
+  --hig-label:          var(--label);
+  --hig-label-2:        var(--label-secondary);
+  --hig-label-3:        var(--label-tertiary);
+  --hig-separator:      var(--separator);
+  --hig-separator-opaque: var(--separator-opaque);
+
+  /* ---- Typography: families ------------------------------------------ */
+  --hig-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+              "Helvetica Neue", system-ui, sans-serif;
+  --hig-font-rounded: "SF Pro Rounded", -apple-system, system-ui, sans-serif;
+  --hig-font-serif: ui-serif, "New York", Georgia, serif;
+  --hig-font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* ---- Typography: weights ------------------------------------------- */
+  --hig-w-regular: 400; --hig-w-medium: 500; --hig-w-semibold: 600;
+  --hig-w-bold: 700; --hig-w-heavy: 800;
+
+  /* ---- Typography: iOS Dynamic Type ramp (size / line-height / tracking)
+     Sizes in rem (root 16px = 1rem) so they scale with browser zoom. ---- */
+  --hig-large-title:      2.125rem; --hig-large-title-lh: 2.5625rem; --hig-large-title-tr:  0.37px;
+  --hig-title-1:          1.75rem;  --hig-title-1-lh:     2.125rem;  --hig-title-1-tr:      0.36px;
+  --hig-title-2:          1.375rem; --hig-title-2-lh:     1.75rem;   --hig-title-2-tr:      0.35px;
+  --hig-title-3:          1.25rem;  --hig-title-3-lh:     1.5625rem; --hig-title-3-tr:      0.38px;
+  --hig-headline:         1.0625rem;--hig-headline-lh:    1.375rem;  --hig-headline-tr:    -0.43px;
+  --hig-body:             1.0625rem;--hig-body-lh:        1.375rem;  --hig-body-tr:        -0.43px;
+  --hig-callout:          1rem;     --hig-callout-lh:     1.3125rem; --hig-callout-tr:     -0.31px;
+  --hig-subheadline:      0.9375rem;--hig-subheadline-lh: 1.25rem;   --hig-subheadline-tr: -0.24px;
+  --hig-footnote:         0.8125rem;--hig-footnote-lh:    1.125rem;  --hig-footnote-tr:    -0.08px;
+  --hig-caption-1:        0.75rem;  --hig-caption-1-lh:   1rem;      --hig-caption-1-tr:    0px;
+  --hig-caption-2:        0.6875rem;--hig-caption-2-lh:   0.8125rem; --hig-caption-2-tr:    0.07px;
+
+  /* ---- Spacing · 8pt grid with 4pt steps ----------------------------- */
+  --hig-space-1: 2px;  --hig-space-2: 4px;  --hig-space-3: 8px;
+  --hig-space-4: 12px; --hig-space-5: 16px; --hig-space-6: 20px;
+  --hig-space-7: 24px; --hig-space-8: 32px; --hig-space-9: 40px;
+  --hig-space-10: 48px;--hig-space-11: 64px;
+  --hig-margin: 16px;            /* default iOS screen margin */
+  --hig-hit: 44px;               /* minimum touch target */
+
+  /* ---- Corner radius (continuous-ish) -------------------------------- */
+  --hig-radius-xs: 6px;  --hig-radius-sm: 8px;  --hig-radius-md: 10px;
+  --hig-radius-lg: 14px; --hig-radius-xl: 20px; --hig-radius-capsule: 999px;
+
+  /* ---- Shadows / elevation ------------------------------------------- */
+  --hig-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.10);
+  --hig-shadow-2: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --hig-shadow-3: 0 8px 24px rgba(0, 0, 0, 0.16);
+  --hig-shadow-modal: 0 -2px 24px rgba(0, 0, 0, 0.18);
+  --hig-shadow-window: 0 22px 70px rgba(0, 0, 0, 0.35);
+
+  /* ---- Materials / Liquid Glass -------------------------------------- */
+  --hig-glass-blur: 20px;            /* thicker glass -> larger blur */
+  --hig-glass-saturate: 180%;
+  --hig-glass-fill: color-mix(in srgb, var(--bg-elevated) 65%, transparent);
+  --hig-glass-fill-clear: color-mix(in srgb, var(--bg-elevated) 30%, transparent);
+  --hig-glass-border: color-mix(in srgb, white 25%, transparent);
+  --hig-glass-sheen: color-mix(in srgb, white 40%, transparent);
+
+  /* ---- Motion --------------------------------------------------------- */
+  --hig-ease: cubic-bezier(0.32, 0.72, 0, 1); /* spring-like */
+  --hig-dur: 0.35s;
+  --hig-dur-fast: 0.18s;
+}
+
+/* ==========================================================================
+   Dark mode — applies when the system prefers dark OR data-hig-theme="dark"
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-hig-theme="light"]) {
+    --sys-blue:   #0A84FF;  --sys-green:  #30D158;  --sys-indigo: #5E5CE6;
+    --sys-orange: #FF9F0A;  --sys-pink:   #FF375F;  --sys-purple: #BF5AF2;
+    --sys-red:    #FF453A;  --sys-teal:   #40C8E0;  --sys-cyan:   #64D2FF;
+    --sys-mint:   #63E6E2;  --sys-yellow: #FFD60A;  --sys-brown:  #AC8E68;
+
+    --gray-1: #8E8E93; --gray-2: #636366; --gray-3: #48484A;
+    --gray-4: #3A3A3C; --gray-5: #2C2C2E; --gray-6: #1C1C1E;
+
+    --label:            rgba(255, 255, 255, 1);
+    --label-secondary:  rgba(235, 235, 245, 0.6);
+    --label-tertiary:   rgba(235, 235, 245, 0.3);
+    --label-quaternary: rgba(235, 235, 245, 0.16);
+    --placeholder:      rgba(235, 235, 245, 0.3);
+
+    --separator:        rgba(84, 84, 88, 0.6);
+    --separator-opaque: #38383A;
+
+    --bg:           #000000;
+    --bg-secondary: #1C1C1E;
+    --bg-tertiary:  #2C2C2E;
+    --bg-grouped:   #000000;
+    --bg-grouped-2: #1C1C1E;
+    --bg-grouped-3: #2C2C2E;
+    --bg-elevated:  #1C1C1E;
+
+    --fill-1: rgba(120, 120, 128, 0.36);
+    --fill-2: rgba(120, 120, 128, 0.32);
+    --fill-3: rgba(118, 118, 128, 0.24);
+    --fill-4: rgba(118, 118, 128, 0.18);
+
+    --hig-glass-border: color-mix(in srgb, white 14%, transparent);
+    --hig-glass-sheen:  color-mix(in srgb, white 18%, transparent);
+  }
+}
+
+/* Forced dark via attribute (mirror of the block above) */
+:root[data-hig-theme="dark"] {
+  --sys-blue:   #0A84FF;  --sys-green:  #30D158;  --sys-indigo: #5E5CE6;
+  --sys-orange: #FF9F0A;  --sys-pink:   #FF375F;  --sys-purple: #BF5AF2;
+  --sys-red:    #FF453A;  --sys-teal:   #40C8E0;  --sys-cyan:   #64D2FF;
+  --sys-mint:   #63E6E2;  --sys-yellow: #FFD60A;  --sys-brown:  #AC8E68;
+  --gray-1: #8E8E93; --gray-2: #636366; --gray-3: #48484A;
+  --gray-4: #3A3A3C; --gray-5: #2C2C2E; --gray-6: #1C1C1E;
+  --label: rgba(255,255,255,1); --label-secondary: rgba(235,235,245,0.6);
+  --label-tertiary: rgba(235,235,245,0.3); --label-quaternary: rgba(235,235,245,0.16);
+  --placeholder: rgba(235,235,245,0.3);
+  --separator: rgba(84,84,88,0.6); --separator-opaque: #38383A;
+  --bg: #000; --bg-secondary: #1C1C1E; --bg-tertiary: #2C2C2E;
+  --bg-grouped: #000; --bg-grouped-2: #1C1C1E; --bg-grouped-3: #2C2C2E;
+  --bg-elevated: #1C1C1E;
+  --fill-1: rgba(120,120,128,0.36); --fill-2: rgba(120,120,128,0.32);
+  --fill-3: rgba(118,118,128,0.24); --fill-4: rgba(118,118,128,0.18);
+  --hig-glass-border: color-mix(in srgb, white 14%, transparent);
+  --hig-glass-sheen:  color-mix(in srgb, white 18%, transparent);
+}
+
+/* ==========================================================================
+   macOS density — smaller, desktop type ramp. <html data-hig-platform="macos">
+   ========================================================================== */
+:root[data-hig-platform="macos"] {
+  --hig-large-title: 1.625rem; --hig-large-title-lh: 2rem;
+  --hig-title-1: 1.375rem;     --hig-title-1-lh: 1.6875rem;
+  --hig-title-2: 1.0625rem;    --hig-title-2-lh: 1.375rem;
+  --hig-title-3: 0.9375rem;    --hig-title-3-lh: 1.25rem;
+  --hig-headline: 0.8125rem;   --hig-headline-lh: 1.0625rem;
+  --hig-body: 0.8125rem;       --hig-body-lh: 1.0625rem;
+  --hig-callout: 0.75rem;      --hig-callout-lh: 1rem;
+  --hig-subheadline: 0.6875rem;--hig-subheadline-lh: 0.9375rem;
+  --hig-footnote: 0.625rem;    --hig-footnote-lh: 0.875rem;
+  --hig-caption-1: 0.625rem;   --hig-caption-1-lh: 0.8125rem;
+  --hig-caption-2: 0.625rem;   --hig-caption-2-lh: 0.8125rem;
+  --hig-margin: 20px;
+  --hig-hit: 28px;             /* pointer targets are smaller */
+  --hig-radius-md: 6px; --hig-radius-lg: 8px;
+}
