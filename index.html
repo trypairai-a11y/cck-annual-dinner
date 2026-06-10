@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CCH Annual Dinner — RSVP</title>
-<meta name="description" content="RSVP for the CCH Annual Dinner — Monday 22nd June 2026, 7:00–10:00 PM. Hosted by Rasiyat Holding Company.">
+<title>CCK Annual Dinner — RSVP</title>
+<meta name="description" content="RSVP for the CCK Annual Dinner — Monday 22nd June 2026, 7:00–10:00 PM. Canadian College of Kuwait, a Rasiyat Holding Company.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
@@ -71,19 +71,15 @@
   .d4 { animation-delay: 0.44s; } .d5 { animation-delay: 0.57s; } .d6 { animation-delay: 0.7s; }
 
   /* ---------- brand ---------- */
-  .mark { display: inline-block; margin-bottom: 14px; }
-  .brand-en {
-    font-family: "Jost", sans-serif; font-weight: 600;
-    font-size: 15px; letter-spacing: 0.42em; text-indent: 0.42em;
-    color: var(--champagne); text-transform: uppercase;
+  .plaque {
+    display: inline-block; background: #f4efe4;
+    border-radius: 4px; padding: 18px 26px;
+    box-shadow: 0 18px 44px -18px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(236, 217, 189, 0.18);
   }
-  .brand-ar {
-    font-family: "Amiri", serif; font-size: 17px; color: var(--copper);
-    margin-top: 2px;
-  }
+  .plaque img { display: block; width: min(330px, 72vw); height: auto; }
   .brand-sub {
     font-size: 10px; letter-spacing: 0.3em; text-indent: 0.3em;
-    text-transform: uppercase; color: var(--text-dim); margin-top: 8px;
+    text-transform: uppercase; color: var(--text-dim); margin-top: 16px;
   }
 
   .rule {
@@ -301,29 +297,16 @@
 <main class="wrap">
 
   <header class="rise d1">
-    <div class="mark" aria-hidden="true">
-      <svg width="72" height="44" viewBox="0 0 72 44">
-        <defs>
-          <linearGradient id="pk1" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#e0a96d"/><stop offset="1" stop-color="#8c5a2b"/>
-          </linearGradient>
-          <linearGradient id="pk2" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#ecd9bd"/><stop offset="1" stop-color="#c98b4e"/>
-          </linearGradient>
-        </defs>
-        <polygon points="6,40 28,8 42,28 36,40" fill="url(#pk1)"/>
-        <polygon points="30,40 48,14 66,40 54,40 48,30 42,40" fill="url(#pk2)"/>
-      </svg>
+    <div class="plaque">
+      <img src="cck-logo.png" alt="CCK — Canadian College of Kuwait">
     </div>
-    <div class="brand-en">Rasiyat</div>
-    <div class="brand-ar">راسيات</div>
-    <div class="brand-sub">Rasiyat Holding Company K.P.S.C</div>
+    <div class="brand-sub">A Rasiyat Holding Company K.P.S.C</div>
   </header>
 
   <div class="rule rise d2" aria-hidden="true"></div>
 
   <section class="rise d3">
-    <div class="overline">CCH cordially invites you</div>
+    <div class="overline">CCK cordially invites you</div>
     <h1>Annual<br><em>Dinner</em></h1>
     <div class="when">Monday, the 22nd of June, 2026</div>
     <div class="when-sub">Seven until ten in the evening</div>
@@ -378,7 +361,7 @@
       <p class="success-body" id="successBody"></p>
       <div class="center">
         <a class="cal-link" id="calLink" target="_blank" rel="noopener"
-           href="https://www.google.com/calendar/render?action=TEMPLATE&text=CCH+Annual+Dinner&dates=20260622T190000/20260622T220000&ctz=Asia/Kuwait&details=CCH+Annual+Dinner+%E2%80%94+Rasiyat+Holding+Company">
+           href="https://www.google.com/calendar/render?action=TEMPLATE&text=CCK+Annual+Dinner&dates=20260622T190000/20260622T220000&ctz=Asia/Kuwait&details=CCK+Annual+Dinner+%E2%80%94+Canadian+College+of+Kuwait%2C+a+Rasiyat+Holding+Company">
           Add to calendar
         </a>
       </div>
@@ -393,7 +376,7 @@
   </p>
 </main>
 
-<footer>Rasiyat Holding Company — CCH Annual Dinner 2026</footer>
+<footer>Canadian College of Kuwait — CCK Annual Dinner 2026</footer>
 
 <script>
   const STORE = "https://kvdb.io/DhdtZG5kWh7god2RSUoW6U";
@@ -427,7 +410,7 @@
     try {
       const res = await fetch(`${STORE}/rsvp_${slug(name)}`, { method: "PUT", body: JSON.stringify(record) });
       if (!res.ok) throw new Error(await res.text());
-      localStorage.setItem("cch_rsvp_2026", JSON.stringify(record));
+      localStorage.setItem("cck_rsvp_2026", JSON.stringify(record));
       showSuccess(record);
     } catch (err) {
       showErr("We couldn't record your response — please check your connection and try again.");
@@ -457,7 +440,7 @@
   });
 
   // restore previous response
-  const prev = localStorage.getItem("cch_rsvp_2026");
+  const prev = localStorage.getItem("cck_rsvp_2026");
   if (prev) {
     try {
       const r = JSON.parse(prev);

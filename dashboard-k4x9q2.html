@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CCH Annual Dinner — Host Dashboard</title>
+<title>CCK Annual Dinner — Host Dashboard</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -111,8 +111,8 @@
 <div class="wrap">
   <header>
     <div>
-      <div class="kicker">Host dashboard · Rasiyat Holding Company</div>
-      <h1>CCH <em>Annual Dinner</em></h1>
+      <div class="kicker">Host dashboard · Canadian College of Kuwait</div>
+      <h1>CCK <em>Annual Dinner</em></h1>
       <div class="meta">Monday 22 June 2026 · 7:00 – 10:00 PM</div>
     </div>
     <div class="live"><span class="dot"></span><span id="liveLbl">Live</span></div>
@@ -217,7 +217,7 @@
     const csv = lines.map(l => l.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob(["﻿" + csv], { type: "text/csv" }));
-    a.download = "cch-annual-dinner-rsvps.csv";
+    a.download = "cck-annual-dinner-rsvps.csv";
     a.click();
   });
 
