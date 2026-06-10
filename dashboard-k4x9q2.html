@@ -11,6 +11,14 @@
 <link rel="stylesheet" href="hig/tokens.css">
 <link rel="stylesheet" href="hig/apple-hig.css">
 <style>
+  /* Readability overrides: near-opaque glass + darker secondary text. */
+  :root[data-hig-theme="light"] {
+    --hig-glass-fill: rgba(255, 255, 255, 0.9);
+    --hig-glass-fill-clear: rgba(255, 255, 255, 0.65);
+    --label-secondary: rgba(50, 50, 56, 0.78);
+  }
+  .hig-row-subtitle { color: var(--label-secondary); }
+
   html, body { margin: 0; padding: 0; }
   body { min-height: 100vh; min-height: 100dvh; background: #f4f5f7; }
 
@@ -27,10 +35,10 @@
   .backdrop::after {
     content: ""; position: absolute; inset: 0;
     background: linear-gradient(180deg,
-      rgba(248, 249, 251, 0.55) 0%,
-      rgba(246, 247, 249, 0.85) 30%,
-      rgba(244, 245, 247, 0.96) 58%,
-      #f4f5f7 85%);
+      rgba(248, 249, 251, 0.62) 0%,
+      rgba(246, 247, 249, 0.9) 26%,
+      rgba(244, 245, 247, 0.98) 52%,
+      #f4f5f7 75%);
   }
 
   .nav-wrap { position: sticky; top: 0; z-index: 50; padding: var(--hig-space-3) var(--hig-margin) 0; max-width: 980px; margin: 0 auto; }
@@ -57,7 +65,7 @@
   .stat .num { font-size: var(--hig-title-1); line-height: var(--hig-title-1-lh); font-weight: var(--hig-w-bold);
                font-variant-numeric: tabular-nums; }
   .stat.hero .num { color: var(--hig-tint); }
-  .stat .lbl { margin-top: var(--hig-space-1); color: var(--hig-label-2); font-size: var(--hig-footnote); }
+  .stat .lbl { margin-top: var(--hig-space-1); color: var(--label-secondary); font-size: var(--hig-subheadline); }
 
   .share { margin-top: var(--hig-space-4); padding: var(--hig-space-5); }
   .share .hig-progress { margin-top: var(--hig-space-3); height: 6px; border-radius: 3px; }
@@ -88,7 +96,7 @@
   .skeleton-row .hig-skeleton:first-child { width: 36px; height: 36px; border-radius: 50%; flex: none; }
   .skeleton-row .hig-skeleton:last-child { height: 14px; flex: 1; max-width: 220px; }
 
-  .updated { margin-top: var(--hig-space-4); color: var(--hig-label-3); font-size: var(--hig-caption-1); text-align: center; }
+  .updated { margin-top: var(--hig-space-4); color: var(--label-secondary); font-size: var(--hig-footnote); text-align: center; }
 
   @media (prefers-reduced-motion: reduce) {
     .backdrop img, .live .dot { animation: none; }
@@ -215,7 +223,7 @@
         <span class="avatar" aria-hidden="true">${initials(r.name)}</span>
         <span class="hig-row-text">
           <span class="hig-row-title">${esc(r.name)}</span>
-          <span class="hig-row-subtitle">Responded ${fmt(r.ts)}</span>
+          <span class="hig-row-subtitle">${esc(r.email || "")}${r.email ? " · " : ""}Responded ${fmt(r.ts)}</span>
         </span>
         <span class="row-tags">
           <span class="hig-tag ${r.attending === "yes" ? "tag-yes" : "tag-no"}">${r.attending === "yes" ? "Attending" : "Regrets"}</span>
@@ -250,8 +258,8 @@
   document.getElementById("refreshBtn").addEventListener("click", load);
   document.getElementById("retryBtn").addEventListener("click", load);
   document.getElementById("csvBtn").addEventListener("click", () => {
-    const lines = [["Name", "RSVP", "Plus one", "Responded (Kuwait time)"]]
-      .concat(rows.map(r => [r.name, r.attending === "yes" ? "Will attend" : "Will not attend",
+    const lines = [["Name", "Email", "RSVP", "Plus one", "Responded (Kuwait time)"]]
+      .concat(rows.map(r => [r.name, r.email || "", r.attending === "yes" ? "Will attend" : "Will not attend",
                              r.attending === "yes" && r.plusone === "yes" ? "Yes" : "No", fmt(r.ts)]));
     const csv = lines.map(l => l.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
     const a = document.createElement("a");

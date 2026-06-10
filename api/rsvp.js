@@ -2,14 +2,13 @@ import { neon } from "@neondatabase/serverless";
 
 const sql = neon(process.env.DATABASE_URL);
 
-const slug = s =>
-  s.toLowerCase().trim().replace(/[^a-z0-9؀-ۿ]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
+const EMAIL_RE = /^[^@\s]+@cck\.edu\.kw$/;
 
 let ready;
 function ensureTable() {
   ready ??= sql`
     CREATE TABLE IF NOT EXISTS rsvps (
-      slug      text PRIMARY KEY,
+      email     text PRIMARY KEY,
       name      text NOT NULL,
       attending text NOT NULL,
       plusone   text NOT NULL,
@@ -29,7 +28,7 @@ export default async function handler(req, res) {
 
     if (req.method === "GET") {
       const rows = await sql`
-        SELECT name, attending, plusone, ts FROM rsvps ORDER BY ts DESC`;
+        SELECT email, name, attending, plusone, ts FROM rsvps ORDER BY ts DESC`;
       res.setHeader("Cache-Control", "no-store");
       return res.status(200).json(
         rows.map(r => ({ ...r, ts: new Date(r.ts).toISOString() }))
@@ -37,21 +36,22 @@ export default async function handler(req, res) {
     }
 
     if (req.method === "POST") {
-      const { name, attending, plusone } = req.body || {};
+      const { name, email, attending, plusone } = req.body || {};
       if (typeof name !== "string" || name.trim().length < 2 || name.length > 80)
         return res.status(400).json({ error: "Please provide your name." });
+      const cleanEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
+      if (!EMAIL_RE.test(cleanEmail) || cleanEmail.length > 120)
+        return res.status(400).json({ error: "Please use your CCK college email (@cck.edu.kw)." });
       if (attending !== "yes" && attending !== "no")
         return res.status(400).json({ error: "Attendance must be yes or no." });
 
       const cleanName = name.trim();
-      const key = slug(cleanName);
-      if (!key) return res.status(400).json({ error: "Please provide a valid name." });
       const plus = attending === "yes" && plusone === "yes" ? "yes" : "no";
 
       await sql`
-        INSERT INTO rsvps (slug, name, attending, plusone, ts)
-        VALUES (${key}, ${cleanName}, ${attending}, ${plus}, now())
-        ON CONFLICT (slug) DO UPDATE
+        INSERT INTO rsvps (email, name, attending, plusone, ts)
+        VALUES (${cleanEmail}, ${cleanName}, ${attending}, ${plus}, now())
+        ON CONFLICT (email) DO UPDATE
           SET name = EXCLUDED.name,
               attending = EXCLUDED.attending,
               plusone = EXCLUDED.plusone,

@@ -11,6 +11,17 @@
 <link rel="stylesheet" href="hig/tokens.css">
 <link rel="stylesheet" href="hig/apple-hig.css">
 <style>
+  /* Readability overrides: near-opaque glass + darker secondary text,
+     so content stays legible over the photo backdrop. */
+  :root[data-hig-theme="light"] {
+    --hig-glass-fill: rgba(255, 255, 255, 0.88);
+    --hig-glass-fill-clear: rgba(255, 255, 255, 0.65);
+    --placeholder: rgba(60, 60, 67, 0.48);
+    --label-secondary: rgba(50, 50, 56, 0.78);
+  }
+  .hig-list-header { color: var(--label-secondary); font-weight: var(--hig-w-semibold); }
+  .hig-row-subtitle { color: var(--label-secondary); }
+
   html, body { margin: 0; padding: 0; }
   body { min-height: 100vh; min-height: 100dvh; background: #f4f5f7; }
 
@@ -28,10 +39,10 @@
   .backdrop::after {
     content: ""; position: absolute; inset: 0;
     background: linear-gradient(180deg,
-      rgba(248, 249, 251, 0.42) 0%,
-      rgba(246, 247, 249, 0.78) 34%,
-      rgba(244, 245, 247, 0.94) 62%,
-      #f4f5f7 88%);
+      rgba(248, 249, 251, 0.55) 0%,
+      rgba(246, 247, 249, 0.88) 30%,
+      rgba(244, 245, 247, 0.97) 55%,
+      #f4f5f7 78%);
   }
 
   main {
@@ -141,7 +152,6 @@
     <div class="brand-plaque">
       <img src="cck-logo.png" alt="CCK — Canadian College of Kuwait" width="300" height="50">
     </div>
-    <p class="brand-sub hig-caption-1">A Rasiyat Holding Company K.P.S.C</p>
   </header>
 
   <section class="hero rise" aria-labelledby="pageTitle">
@@ -177,13 +187,19 @@
 
     <form id="rsvpForm" novalidate>
       <div class="glass-list" style="margin-top: 0">
-        <label class="hig-list-header" for="guestName">Your name</label>
+        <label class="hig-list-header" for="guestName">Your details</label>
         <div class="hig-list glass">
           <div class="hig-row">
             <input class="row-field" type="text" id="guestName" name="name"
                    placeholder="Full name" autocomplete="name" maxlength="80" required>
           </div>
+          <div class="hig-row">
+            <input class="row-field" type="email" id="guestEmail" name="email"
+                   placeholder="you@cck.edu.kw" autocomplete="email" inputmode="email"
+                   maxlength="120" spellcheck="false" required aria-describedby="emailHint">
+          </div>
         </div>
+        <p class="hig-list-footer" id="emailHint">Use your CCK college email — ending in @cck.edu.kw</p>
       </div>
 
       <div class="section glass-list" role="radiogroup" aria-labelledby="attendLabel">
@@ -268,11 +284,14 @@
     errBox.classList.remove("show");
 
     const name = form.name.value.trim();
+    const email = form.email.value.trim().toLowerCase();
     if (name.length < 2) return showErr("Please enter your name.");
+    if (!/^[^@\s]+@cck\.edu\.kw$/.test(email))
+      return showErr("Please use your CCK college email — it must end in @cck.edu.kw.");
     if (!attending) return showErr("Please let us know whether you will attend.");
 
     const record = {
-      name, attending,
+      name, email, attending,
       plusone: attending === "yes" && plusToggle.checked ? "yes" : "no",
     };
 
@@ -320,6 +339,7 @@
     try {
       const r = JSON.parse(prev);
       form.name.value = r.name;
+      if (r.email) form.email.value = r.email;
       selectAttend(r.attending);
       plusToggle.checked = r.plusone === "yes";
       showSuccess(r);
