@@ -1,29 +1,40 @@
 <!DOCTYPE html>
-<html lang="en" data-hig-theme="dark">
+<html lang="en" data-hig-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#0b0f0d">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f4f5f7">
 <meta name="robots" content="noindex, nofollow">
 <title>CCK Annual Dinner — Host Dashboard</title>
+<link rel="preload" as="image" href="bg.jpg">
 <link rel="stylesheet" href="hig/tokens.css">
 <link rel="stylesheet" href="hig/apple-hig.css">
 <style>
   html, body { margin: 0; padding: 0; }
-  body { min-height: 100vh; min-height: 100dvh; background: #0b0f0d; }
+  body { min-height: 100vh; min-height: 100dvh; background: #f4f5f7; }
 
-  .backdrop { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-  .backdrop::before {
-    content: ""; position: absolute; inset: -20%;
-    background:
-      radial-gradient(46% 38% at 18% 8%, rgba(48, 209, 88, 0.13), transparent 70%),
-      radial-gradient(42% 36% at 86% 30%, rgba(255, 69, 58, 0.08), transparent 70%),
-      radial-gradient(120% 100% at 50% 0%, #111813 0%, #0b0f0d 60%, #060807 100%);
+  .backdrop { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+  .backdrop img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    transform-origin: 50% 35%;
+    animation: kenburns 38s ease-in-out infinite alternate;
+  }
+  @keyframes kenburns {
+    from { transform: scale(1.06) translate(0, 0); }
+    to   { transform: scale(1.2) translate(-1.6%, -2.4%); }
+  }
+  .backdrop::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg,
+      rgba(248, 249, 251, 0.55) 0%,
+      rgba(246, 247, 249, 0.85) 30%,
+      rgba(244, 245, 247, 0.96) 58%,
+      #f4f5f7 85%);
   }
 
-  .nav-wrap .glass { width: 100%; display: flex; align-items: center; flex-wrap: wrap; gap: var(--hig-space-3); min-height: 52px; padding: var(--hig-space-2) var(--hig-space-5); border-radius: var(--hig-radius-xl); }
   .nav-wrap { position: sticky; top: 0; z-index: 50; padding: var(--hig-space-3) var(--hig-margin) 0; max-width: 980px; margin: 0 auto; }
+  .nav-wrap .glass { width: 100%; display: flex; align-items: center; flex-wrap: wrap; gap: var(--hig-space-3); min-height: 52px; padding: var(--hig-space-2) var(--hig-space-5); border-radius: var(--hig-radius-xl); }
   .nav-title { flex: 1; font-size: var(--hig-headline); font-weight: var(--hig-w-semibold); }
   .nav-actions { display: flex; gap: var(--hig-space-2); }
   .nav-actions .hig-btn { min-height: 36px; }
@@ -35,10 +46,10 @@
                     letter-spacing: var(--hig-large-title-tr); font-weight: var(--hig-w-bold); }
   .title-block p { margin: var(--hig-space-2) 0 0; color: var(--hig-label-2); }
   .live { display: inline-flex; align-items: center; gap: var(--hig-space-2); color: var(--hig-label-2); }
-  .live .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hig-success); }
+  .live .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hig-success);
+               animation: pulse 1.8s infinite; }
   @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--hig-success) 45%, transparent); }
                      60% { box-shadow: 0 0 0 6px transparent; } }
-  .live .dot { animation: pulse 1.8s infinite; }
 
   .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
            gap: var(--hig-space-4); margin-top: var(--hig-space-7); }
@@ -57,7 +68,7 @@
   .toolbar-row { display: flex; align-items: center; justify-content: space-between; gap: var(--hig-space-4);
                  flex-wrap: wrap; margin: var(--hig-space-8) 0 var(--hig-space-4); }
   .toolbar-row h2 { margin: 0; font-size: var(--hig-title-2); font-weight: var(--hig-w-semibold); }
-  .hig-segmented { width: 100%; max-width: 360px; }
+  .hig-segmented { width: 100%; max-width: 360px; background: rgba(255,255,255,0.6); }
   .hig-segmented > button { min-height: 32px; }
 
   .guest-list { padding: 0; }
@@ -66,9 +77,9 @@
             background: var(--fill-2); color: var(--hig-label);
             display: inline-flex; align-items: center; justify-content: center;
             font-size: var(--hig-footnote); font-weight: var(--hig-w-semibold); }
-  .tag-yes { background: color-mix(in srgb, var(--hig-success) 18%, transparent); color: var(--hig-success); }
+  .tag-yes { background: color-mix(in srgb, var(--hig-success) 16%, white); color: color-mix(in srgb, var(--hig-success) 70%, black); }
   .tag-no  { background: var(--fill-3); color: var(--hig-label-2); }
-  .tag-plus { background: color-mix(in srgb, var(--hig-tint) 18%, transparent); color: var(--hig-tint); }
+  .tag-plus { background: color-mix(in srgb, var(--hig-tint) 14%, white); color: var(--hig-tint); }
   .row-tags { display: flex; gap: var(--hig-space-2); flex: none; flex-wrap: wrap; justify-content: flex-end; }
 
   .state { padding: var(--hig-space-10) var(--hig-space-5); text-align: center; color: var(--hig-label-2); }
@@ -78,11 +89,17 @@
   .skeleton-row .hig-skeleton:last-child { height: 14px; flex: 1; max-width: 220px; }
 
   .updated { margin-top: var(--hig-space-4); color: var(--hig-label-3); font-size: var(--hig-caption-1); text-align: center; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .backdrop img, .live .dot { animation: none; }
+  }
 </style>
 </head>
-<body class="hig">
+<body class="hig" style="background: transparent">
 
-<div class="backdrop" aria-hidden="true"></div>
+<div class="backdrop" aria-hidden="true">
+  <img src="bg.jpg" alt="">
+</div>
 
 <div class="nav-wrap">
   <nav class="glass" aria-label="Dashboard actions">
@@ -148,18 +165,16 @@
 </main>
 
 <script>
-  const STORE = "https://kvdb.io/DhdtZG5kWh7god2RSUoW6U";
+  // Relative on Vercel; absolute fallback when served from GitHub Pages.
+  const API = (location.hostname.endsWith("github.io") ? "https://cck-annual-dinner.vercel.app" : "") + "/api/rsvp";
   let rows = [], filter = "all", loaded = false;
 
   async function load() {
     document.getElementById("liveLbl").textContent = "Updating…";
     try {
-      const res = await fetch(`${STORE}/?prefix=rsvp_&values=true&format=json&limit=1000`, { cache: "no-store" });
+      const res = await fetch(API, { cache: "no-store" });
       if (!res.ok) throw new Error(res.status);
-      const data = await res.json(); // [[key, value], ...]
-      rows = data.map(([k, v]) => { try { return JSON.parse(v); } catch { return null; } })
-                 .filter(r => r && r.name)
-                 .sort((a, b) => (b.ts || "").localeCompare(a.ts || ""));
+      rows = (await res.json()).filter(r => r && r.name);
       loaded = true;
       document.getElementById("error").style.display = "none";
       render();

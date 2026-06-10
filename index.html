@@ -1,37 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" data-hig-theme="dark">
+<html lang="en" data-hig-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#0b0f0d">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f4f5f7">
 <title>CCK Annual Dinner — RSVP</title>
 <meta name="description" content="RSVP for the CCK Annual Dinner — Monday 22nd June 2026, 7:00–10:00 PM. Canadian College of Kuwait, a Rasiyat Holding Company.">
+<link rel="preload" as="image" href="bg.jpg">
 <link rel="stylesheet" href="hig/tokens.css">
 <link rel="stylesheet" href="hig/apple-hig.css">
 <style>
-  /* Page-level styles on top of the HIG kit. Tokens only — no raw hex
-     except the fixed atmospheric backdrop, which is content, not chrome. */
   html, body { margin: 0; padding: 0; }
-  body {
-    min-height: 100vh;
-    min-height: 100dvh;
-    background: #0b0f0d;
-  }
+  body { min-height: 100vh; min-height: 100dvh; background: #f4f5f7; }
 
-  /* Atmospheric content layer the Liquid Glass refracts */
+  /* Animated campus photo backdrop with white veil */
   .backdrop { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-  .backdrop::before {
-    content: ""; position: absolute; inset: -20%;
-    background:
-      radial-gradient(46% 38% at 22% 12%, rgba(48, 209, 88, 0.16), transparent 70%),
-      radial-gradient(42% 36% at 82% 26%, rgba(255, 69, 58, 0.10), transparent 70%),
-      radial-gradient(60% 46% at 50% 96%, rgba(10, 132, 255, 0.10), transparent 70%),
-      radial-gradient(120% 100% at 50% 0%, #111813 0%, #0b0f0d 60%, #060807 100%);
+  .backdrop img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    transform-origin: 50% 35%;
+    animation: kenburns 38s ease-in-out infinite alternate;
   }
-  .backdrop::after { /* fine grain so blur has texture */
-    content: ""; position: absolute; inset: 0; opacity: 0.04;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  @keyframes kenburns {
+    from { transform: scale(1.06) translate(0, 0); }
+    to   { transform: scale(1.2) translate(-1.6%, -2.4%); }
+  }
+  .backdrop::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg,
+      rgba(248, 249, 251, 0.42) 0%,
+      rgba(246, 247, 249, 0.78) 34%,
+      rgba(244, 245, 247, 0.94) 62%,
+      #f4f5f7 88%);
   }
 
   main {
@@ -54,7 +54,8 @@
   .brand { text-align: center; }
   .brand-plaque {
     display: inline-block; padding: var(--hig-space-5) var(--hig-space-6);
-    background: #f5f2ea; border-radius: var(--hig-radius-lg);
+    background: #ffffff; border-radius: var(--hig-radius-lg);
+    border: 0.5px solid var(--hig-separator);
     box-shadow: var(--hig-shadow-2);
   }
   .brand-plaque img { display: block; width: min(300px, 70vw); height: auto; }
@@ -77,7 +78,6 @@
 
   .section { margin-top: var(--hig-space-7); }
 
-  /* Borderless field inside a grouped row */
   .row-field {
     flex: 1; min-height: 28px; border: none; background: transparent;
     font: inherit; font-size: var(--hig-body); color: var(--hig-label);
@@ -85,22 +85,21 @@
   }
   .row-field::placeholder { color: var(--placeholder); }
 
-  /* Checkmark radio rows */
   .check { width: 22px; text-align: center; color: var(--hig-tint); font-size: var(--hig-title-3); font-weight: var(--hig-w-semibold); visibility: hidden; flex: none; }
   [aria-checked="true"] .check { visibility: visible; }
 
-  /* Plus-one disclosure */
   #plusSection { display: none; }
   #plusSection.show { display: block; animation: rise 0.45s var(--hig-ease); }
 
   .submit-wrap { margin-top: var(--hig-space-7); }
-  .deadline { text-align: center; margin-top: var(--hig-space-5); color: var(--hig-label-3); }
+  .deadline { text-align: center; margin-top: var(--hig-space-5); color: var(--hig-label-2); }
 
   .form-error {
     display: none; margin-top: var(--hig-space-4); padding: var(--hig-space-4) var(--hig-space-5);
     border-radius: var(--hig-radius-md);
-    background: color-mix(in srgb, var(--hig-destructive) 14%, transparent);
-    color: var(--hig-destructive); font-size: var(--hig-footnote); line-height: var(--hig-footnote-lh);
+    background: color-mix(in srgb, var(--hig-destructive) 10%, white);
+    color: color-mix(in srgb, var(--hig-destructive) 85%, black);
+    font-size: var(--hig-footnote); line-height: var(--hig-footnote-lh);
     text-align: center;
   }
   .form-error.show { display: block; }
@@ -126,13 +125,16 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .backdrop img { animation: none; }
     .rise, #plusSection.show, .seal { animation: none; opacity: 1; transform: none; }
   }
 </style>
 </head>
-<body class="hig">
+<body class="hig" style="background: transparent">
 
-<div class="backdrop" aria-hidden="true"></div>
+<div class="backdrop" aria-hidden="true">
+  <img src="bg.jpg" alt="">
+</div>
 
 <main>
   <header class="brand rise">
@@ -242,7 +244,8 @@
 <footer class="page-footer hig-caption-1">Canadian College of Kuwait — CCK Annual Dinner 2026</footer>
 
 <script>
-  const STORE = "https://kvdb.io/DhdtZG5kWh7god2RSUoW6U";
+  // Relative on Vercel; absolute fallback when served from GitHub Pages.
+  const API = (location.hostname.endsWith("github.io") ? "https://cck-annual-dinner.vercel.app" : "") + "/api/rsvp";
 
   const form = document.getElementById("rsvpForm");
   const successBox = document.getElementById("success");
@@ -260,8 +263,6 @@
   }
   radios.forEach(r => r.addEventListener("click", () => selectAttend(r.dataset.attend)));
 
-  const slug = s => s.toLowerCase().trim().replace(/[^a-z0-9؀-ۿ]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
-
   form.addEventListener("submit", async e => {
     e.preventDefault();
     errBox.classList.remove("show");
@@ -270,12 +271,18 @@
     if (name.length < 2) return showErr("Please enter your name.");
     if (!attending) return showErr("Please let us know whether you will attend.");
 
-    const plusone = attending === "yes" && plusToggle.checked ? "yes" : "no";
-    const record = { name, attending, plusone, ts: new Date().toISOString() };
+    const record = {
+      name, attending,
+      plusone: attending === "yes" && plusToggle.checked ? "yes" : "no",
+    };
 
     btn.disabled = true; btn.textContent = "Sending…";
     try {
-      const res = await fetch(`${STORE}/rsvp_${slug(name)}`, { method: "PUT", body: JSON.stringify(record) });
+      const res = await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(record),
+      });
       if (!res.ok) throw new Error(await res.text());
       localStorage.setItem("cck_rsvp_2026", JSON.stringify(record));
       showSuccess(record);
@@ -308,7 +315,6 @@
     document.getElementById("deadlineNote").hidden = false;
   });
 
-  // restore previous response
   const prev = localStorage.getItem("cck_rsvp_2026");
   if (prev) {
     try {
